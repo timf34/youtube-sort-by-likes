@@ -7,6 +7,7 @@ import os
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
+from google.oauth2.credentials import Credentials
 
 from typing import List, Dict
 
@@ -23,9 +24,14 @@ class YouTubeDataAPI:
         self.get_youtube()
 
     def get_credentials(self) -> googleapiclient.discovery.Resource:
-        flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-            self.client_secret_file, self.scopes)
-        self.credentials = flow.run_local_server()
+        if os.path.exists('token.json'):
+            self.credentials = Credentials.from_authorized_user_file('token.json', self.scopes)
+        else:
+            flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+                self.client_secret_file, self.scopes)
+            self.credentials = flow.run_local_server(port=0)
+            with open('token.json', 'w') as token:
+                token.write(self.credentials.to_json())
         return self.credentials
 
     def get_youtube(self) -> googleapiclient.discovery.Resource:
