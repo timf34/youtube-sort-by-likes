@@ -62,8 +62,17 @@ class YouTubeDataAPI:
         )
         return request.execute()
 
+    def get_video_id_from_url(self, video_url: str) -> str:
+        """Parses a video url and returns the video id."""
+        request = self.youtube.videos().list(
+            part="id",
+            id=video_url.split("v=")[1]
+        )
+        response = request.execute()
+        return response['items'][0]['id'] if len(response['items']) > 0 else None
 
-def main():
+
+def print_channel_info():
     # Disable OAuthlib's HTTPS verification when running locally.
     # *DO NOT* leave this option enabled in production.
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -75,5 +84,16 @@ def main():
     print(json.dumps(response, indent=4, sort_keys=True))
 
 
+def print_video_id():
+    # Disable OAuthlib's HTTPS verification when running locally.
+    # *DO NOT* leave this option enabled in production.
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+    youtube = YouTubeDataAPI(scopes=["https://www.googleapis.com/auth/youtube.readonly"])
+    video_id = youtube.get_video_id_from_url("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    print(video_id)
+
+
 if __name__ == "__main__":
-    main()
+    # print_channel_info()
+    print_video_id()
