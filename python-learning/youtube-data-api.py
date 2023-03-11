@@ -1,6 +1,9 @@
 # Sample Python code for youtube.channels.list
 # See instructions for running these code samples locally:
 # https://developers.google.com/explorer-help/code-samples#python
+
+# Note: I'm coming back to this at a much later stage, and it seems there's some oauth stuff missing that I can't immediately figure out.
+# Going to try to use my other no_auth.py script as a reference to get this working without oauth.
 import json
 import os
 
@@ -46,11 +49,11 @@ class YouTubeDataAPI:
         )
         return request.execute()
 
-    def get_channel_videos(self, channel_id: str) -> Dict[str, str]:
+    def get_channel_videos(self, channel_id: str, max_results: int = 100) -> Dict[str, str]:
         request = self.youtube.search().list(
             part="snippet",
             channelId=channel_id,
-            maxResults=50,
+            maxResults=max_results,
             order="date"
         )
         return request.execute()
@@ -71,12 +74,16 @@ class YouTubeDataAPI:
         response = request.execute()
         return response['items'][0]['id'] if len(response['items']) > 0 else None
 
+    def get_channel_video_ids(self, channel_id: str) -> List[str]:
+        """Returns a list of video ids for a given channel."""
+        video_ids = []
+        response = self.get_channel_videos(channel_id)
+        for item in response['items']:
+            video_ids.append(item['id']['videoId'])
+        return video_ids
+
 
 def print_channel_info():
-    # Disable OAuthlib's HTTPS verification when running locally.
-    # *DO NOT* leave this option enabled in production.
-    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-
     youtube = YouTubeDataAPI(scopes=["https://www.googleapis.com/auth/youtube.readonly"])
     response = youtube.get_channel_info("UC_x5XG1OV2P6uZZ5FSM9Ttw")
 
@@ -85,15 +92,20 @@ def print_channel_info():
 
 
 def print_video_id():
-    # Disable OAuthlib's HTTPS verification when running locally.
-    # *DO NOT* leave this option enabled in production.
-    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-
     youtube = YouTubeDataAPI(scopes=["https://www.googleapis.com/auth/youtube.readonly"])
     video_id = youtube.get_video_id_from_url("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
     print(video_id)
 
 
+def print_channel_video_ids():
+    youtube = YouTubeDataAPI(scopes=["https://www.googleapis.com/auth/youtube.readonly"])
+    video_ids = youtube.get_channel_video_ids("UC_x5XG1OV2P6uZZ5FSM9Ttw")
+    print(video_ids)
+    print(len(video_ids))
+
+
 if __name__ == "__main__":
-    # print_channel_info()
+    print_channel_info()
+    # print_video_id()
     print_video_id()
+    print_channel_video_ids()
