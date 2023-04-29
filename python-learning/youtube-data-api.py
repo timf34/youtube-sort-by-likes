@@ -1,9 +1,11 @@
-# Sample Python code for youtube.channels.list
-# See instructions for running these code samples locally:
-# https://developers.google.com/explorer-help/code-samples#python
+"""
+Sample Python code for youtube.channels.list
+See instructions for running these code samples locally:
+https://developers.google.com/explorer-help/code-samples#python
 
-# Note: I'm coming back to this at a much later stage, and it seems there's some oauth stuff missing that I can't immediately figure out.
-# Going to try to use my other no_auth.py script as a reference to get this working without oauth.
+Note: If we get a 'Bad Request' response, delete the token.json file and run it again. Log into oauth using
+timf34@gmail.com
+"""
 import json
 import os
 
@@ -106,6 +108,5 @@ def print_channel_video_ids():
 
 if __name__ == "__main__":
     print_channel_info()
-    # print_video_id()
     print_video_id()
     print_channel_video_ids()
