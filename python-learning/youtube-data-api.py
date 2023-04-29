@@ -75,7 +75,12 @@ class YouTubeDataAPI:
         return request.execute()
 
     def get_video_id_from_url(self, video_url: str) -> str:
-        """Parses a video url and returns the video id."""
+        """
+        Parses a video url and returns the video id.
+
+        Args:
+            video_url (str): A YouTube video url (i.e. https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+        """
         request = self.youtube.videos().list(
             part="id",
             id=video_url.split("v=")[1]
@@ -111,42 +116,20 @@ class YouTubeDataAPI:
         return response['items'][0]['id'] if len(response['items']) > 0 else None
 
 
-def print_channel_info(channel_id: str = LEX_CHANNEL_ID):
+def sample():
     youtube = YouTubeDataAPI(scopes=["https://www.googleapis.com/auth/youtube.readonly"])
-    response = youtube.get_channel_info(channel_id)
+    channel_info = youtube.get_channel_info(LEX_CHANNEL_ID)
+    print(json.dumps(channel_info, indent=4, sort_keys=True))
+    chanel_video_ids = youtube.get_channel_video_ids(LEX_CHANNEL_ID)
+    print("Number of videos: ", len(chanel_video_ids))
 
-    # Pretty print the json response
-    print(json.dumps(response, indent=4, sort_keys=True))
-
-
-def print_video_id(channel_id: str = LEX_CHANNEL_ID):
-    youtube = YouTubeDataAPI(scopes=["https://www.googleapis.com/auth/youtube.readonly"])
-    video_id = youtube.get_video_id_from_url("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-    print(video_id)
-
-
-def print_channel_video_ids():
-    youtube = YouTubeDataAPI(scopes=["https://www.googleapis.com/auth/youtube.readonly"])
-    video_ids = youtube.get_channel_video_ids("UC_x5XG1OV2P6uZZ5FSM9Ttw")
-    print(video_ids)
-    print(len(video_ids))
-
-
-def print_video_info(channel_id: str = LEX_CHANNEL_ID):
-    youtube = YouTubeDataAPI(scopes=["https://www.googleapis.com/auth/youtube.readonly"])
-    video_ids = youtube.get_channel_video_ids(channel_id)
-
-    for count, video_id in enumerate(video_ids):
-        response = youtube.get_video_info(video_id)
-        print(json.dumps(response, indent=4, sort_keys=True))
+    # Get video info
+    for count, video_id in enumerate(chanel_video_ids):
+        video_info = youtube.get_video_info(video_id)
+        print(json.dumps(video_info, indent=4, sort_keys=True))
         if count == 3:
             break
 
 
 if __name__ == "__main__":
-    # print_channel_info()
-    # print_video_id()
-    # print_channel_video_ids()
-    #print_video_info()
-    # youtube = YouTubeDataAPI(scopes=["https://www.googleapis.com/auth/youtube.readonly"])
-    # print(youtube.get_channel_id_from_url("https://www.youtube.com/c/lexfridman"))
+    sample()
