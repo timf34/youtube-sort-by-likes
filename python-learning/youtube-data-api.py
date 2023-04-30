@@ -51,6 +51,24 @@ class YouTubeDataAPI:
             self.api_service_name, self.api_version, credentials=self.credentials)
         return self.youtube
 
+    def get_channel_id_from_url(self, url: str) -> str:
+        """Parses a channel url and returns the channel id."""
+        username = url.split("/")[-1]
+
+        # For custom URLs (e.g., "https://www.youtube.com/c/lexfridman")
+        if username.startswith("c/"):
+            username = username[2:]
+        # For URLs with @ symbol (e.g., "https://www.youtube.com/@lexfridman")
+        elif username.startswith("@"):
+            username = username[1:]
+
+        request = self.youtube.channels().list(
+            part="id",
+            forUsername=username
+        )
+        response = request.execute()
+        return response['items'][0]['id'] if len(response['items']) > 0 else None
+
     def get_channel_info(self, channel_id: str) -> Dict[str, str]:
         request = self.youtube.channels().list(
             part="snippet,contentDetails,statistics",
@@ -58,16 +76,43 @@ class YouTubeDataAPI:
         )
         return request.execute()
 
-    def get_channel_videos(self, channel_id: str, max_results: int = 100) -> Dict[str, str]:
-        request = self.youtube.search().list(
-            part="snippet",
-            channelId=channel_id,
-            maxResults=max_results,
-            order="date"
-        )
-        return request.execute()
+    def get_channels_videos_info(self, channel_id: str, max_results: int = 50) -> List[Dict[str, str]]:
+        """
+        Returns a list of dictionaries with information for all videos in a given channel.
+
+        Args:
+            channel_id (str): The channel id (i.e. UCSHZKyawb77ixDdsGog4iWA)
+            max_results (int): The maximum number of results to return. Defaults to 50.
+        """
+        videos_info = []
+        next_page_token = None
+        while True:
+            request = self.youtube.search().list(
+                part="snippet",
+                channelId=channel_id,
+                maxResults=max_results,
+                order="date",
+                pageToken=next_page_token
+            )
+            response = request.execute()
+
+            for item in response['items']:
+                if 'videoId' in item['id']:
+                    video_info = self.get_video_info(item['id']['videoId'])
+                    videos_info.append(video_info)
+
+            if 'nextPageToken' in response:
+                next_page_token = response['nextPageToken']
+            else:
+                break
+
+        return videos_info
 
     def get_video_info(self, video_id: str) -> Dict[str, str]:
+        """
+        Returns a dictionary with information for a given video.
+        :param video_id: The video id.
+        """
         request = self.youtube.videos().list(
             part="snippet,contentDetails,statistics",
             id=video_id
@@ -88,47 +133,34 @@ class YouTubeDataAPI:
         response = request.execute()
         return response['items'][0]['id'] if len(response['items']) > 0 else None
 
-    def get_channel_video_ids(self, channel_id: str) -> List[str]:
+    @staticmethod
+    def get_channel_video_ids_from_videos_info(self, videos_info: dict, channel_id: str) -> List[str]:
         """Returns a list of video ids for a given channel."""
         video_ids = []
-        response = self.get_channel_videos(channel_id)
-        for item in response['items']:
+        for item in videos_info['items']:
             video_ids.append(item['id']['videoId'])
         return video_ids
-
-
-    def get_channel_id_from_url(self, url: str) -> str:
-        """Parses a channel url and returns the channel id."""
-        username = url.split("/")[-1]
-
-        # For custom URLs (e.g., "https://www.youtube.com/c/lexfridman")
-        if username.startswith("c/"):
-            username = username[2:]
-        # For URLs with @ symbol (e.g., "https://www.youtube.com/@lexfridman")
-        elif username.startswith("@"):
-            username = username[1:]
-
-        request = self.youtube.channels().list(
-            part="id",
-            forUsername=username
-        )
-        response = request.execute()
-        return response['items'][0]['id'] if len(response['items']) > 0 else None
 
 
 def sample():
     youtube = YouTubeDataAPI(scopes=["https://www.googleapis.com/auth/youtube.readonly"])
     channel_info = youtube.get_channel_info(LEX_CHANNEL_ID)
-    print(json.dumps(channel_info, indent=4, sort_keys=True))
-    chanel_video_ids = youtube.get_channel_video_ids(LEX_CHANNEL_ID)
-    print("Number of videos: ", len(chanel_video_ids))
+    print("Channel info:\n", json.dumps(channel_info, indent=4, sort_keys=True))
+
+    chanel_videos = youtube.get_channels_videos_info(LEX_CHANNEL_ID, max_results=700)
+    print(json.dumps(chanel_videos, indent=4, sort_keys=True))
+    print("Number of videos: ", len(chanel_videos))
+
+    # chanel_video_ids = youtube.get_channel_video_ids(chanel_videos)
+    # print("Number of videos: ", len(chanel_video_ids))
 
     # Get video info
-    for count, video_id in enumerate(chanel_video_ids):
-        video_info = youtube.get_video_info(video_id)
-        print(json.dumps(video_info, indent=4, sort_keys=True))
-        if count == 3:
-            break
+    # print("Channel's videos' info:")
+    # for count, video_id in enumerate(chanel_video_ids):
+    #     video_info = youtube.get_video_info(video_id)
+    #     print(json.dumps(video_info, indent=4, sort_keys=True))
+    #     if count == 3:
+    #         break
 
 
 if __name__ == "__main__":
