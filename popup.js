@@ -24,30 +24,40 @@ function getVideoStats(videoId) {
 
 // Updates the popup with the most liked video and video with the highest like/view ratio
 async function updatePopup(videos) {
-  let mostLikes = 0;
-  let highestRatio = 0;
-  let mostLikedVideo = "";
-  let highestRatioVideo = "";
+  let mostLikedVideos = Array(3).fill({likes: 0, title: ""});
+  let highestRatioVideos = Array(3).fill({ratio: 0, title: ""});
 
   for (let video of videos) {
     let stats = await getVideoStats(video.id.videoId);
     let views = parseInt(stats.viewCount);
     let likes = parseInt(stats.likeCount);
 
-    if (likes > mostLikes) {
-      mostLikes = likes;
-      mostLikedVideo = video.snippet.title;
+    let ratio = likes / views;
+
+    for (let i = 0; i < 3; i++) {
+      if (likes > mostLikedVideos[i].likes) {
+        mostLikedVideos.splice(i, 0, {likes, title: video.snippet.title});
+        mostLikedVideos.pop();
+        break;
+      }
     }
 
-    let ratio = likes / views;
-    if (ratio > highestRatio) {
-      highestRatio = ratio;
-      highestRatioVideo = video.snippet.title;
+    for (let i = 0; i < 3; i++) {
+      if (ratio > highestRatioVideos[i].ratio) {
+        highestRatioVideos.splice(i, 0, {ratio, title: video.snippet.title});
+        highestRatioVideos.pop();
+        break;
+      }
     }
   }
 
-  document.getElementById("mostLikedVideo").textContent = mostLikedVideo;
-  document.getElementById("highestRatioVideo").textContent = highestRatioVideo;
+  document.getElementById("mostLikedVideo1").textContent = mostLikedVideos[0].title;
+  document.getElementById("mostLikedVideo2").textContent = mostLikedVideos[1].title;
+  document.getElementById("mostLikedVideo3").textContent = mostLikedVideos[2].title;
+
+  document.getElementById("highestRatioVideo1").textContent = highestRatioVideos[0].title;
+  document.getElementById("highestRatioVideo2").textContent = highestRatioVideos[1].title;
+  document.getElementById("highestRatioVideo3").textContent = highestRatioVideos[2].title;
 }
 
 // Fetches the channel ID of a channel by username
