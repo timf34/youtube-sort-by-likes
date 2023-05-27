@@ -43,3 +43,16 @@ div {
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
     border-radius: 15px;
 }
+
+/* Styling for links */
+a {
+    color: #333333;
+    text-decoration: underline;
+    text-decoration-color: #ffb6c1; /* light pink underline */
+    text-decoration-thickness: 2px;
+    transition: opacity 0.3s ease-in-out; /* transition for hover effect */
+}
+
+a:hover {
+    opacity: 0.6;
+}
