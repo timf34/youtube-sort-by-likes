@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My Extension Popup</title>
-    <script src="./popup.js"></script>
+    <title>YouTube Channel Analytics</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
   </head>
   <body>
-    <h1>Hello World!</h1>
+    <h1>YouTube Channel Analytics</h1>
+    <div id="mostLiked">
+      <h2>Most Liked Video:</h2>
+      <p id="mostLikedVideo"></p>
+    </div>
+
+    <div id="highestRatio">
+      <h2>Video with Highest Like:View Ratio:</h2>
+      <p id="highestRatioVideo"></p>
+    </div>
+
+    <script src="popup.js"></script>
   </body>
 </html>
+
+   

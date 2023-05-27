@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "My Extension",
+  "name": "YouTube Sort By Likes",
   "version": "1.0",
-  "description": "This is a basic Chrome extension using Manifest V3.",
+  "description": "Displays most liked and highest like ratio videos for a YouTube channel",
   "permissions": ["activeTab"],
   "action": {
     "default_popup": "popup.html"
