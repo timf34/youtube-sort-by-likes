@@ -1,5 +1,6 @@
 import { getVideos, getVideoStats } from './api.js';
 import { getChannelId } from './utils.js';
+import { decodeHtml } from './utils.js';  
 
 // Updates the popup with the most liked video and video with the highest like/view ratio
 async function updatePopup(videos) {
@@ -32,13 +33,13 @@ async function updatePopup(videos) {
     }
   }
 
-  document.getElementById("mostLikedVideo1").textContent = mostLikedVideos[0].title;
-  document.getElementById("mostLikedVideo2").textContent = mostLikedVideos[1].title;
-  document.getElementById("mostLikedVideo3").textContent = mostLikedVideos[2].title;
+  document.getElementById("mostLikedVideo1").textContent = decodeHtml(mostLikedVideos[0].title);
+  document.getElementById("mostLikedVideo2").textContent = decodeHtml(mostLikedVideos[1].title);
+  document.getElementById("mostLikedVideo3").textContent = decodeHtml(mostLikedVideos[2].title);
 
-  document.getElementById("highestRatioVideo1").textContent = highestRatioVideos[0].title;
-  document.getElementById("highestRatioVideo2").textContent = highestRatioVideos[1].title;
-  document.getElementById("highestRatioVideo3").textContent = highestRatioVideos[2].title;
+  document.getElementById("highestRatioVideo1").textContent = decodeHtml(highestRatioVideos[0].title);
+  document.getElementById("highestRatioVideo2").textContent = decodeHtml(highestRatioVideos[1].title);
+  document.getElementById("highestRatioVideo3").textContent = decodeHtml(highestRatioVideos[2].title);
 }
 
 console.log("yolo dawg");

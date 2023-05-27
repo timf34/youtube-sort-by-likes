@@ -1,8 +1,8 @@
-import { API_KEY } from './constants.js';
+import { API_KEY, MAX_RESULTS} from './constants.js';
 
 function getVideos(channelId) {
   return fetch(
-    `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${channelId}&part=snippet,id&order=viewCount&maxResults=10`
+    `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${channelId}&part=snippet,id&order=viewCount&maxResults=${MAX_RESULTS}`
   )
     .then((response) => response.json())
     .then((data) => {
