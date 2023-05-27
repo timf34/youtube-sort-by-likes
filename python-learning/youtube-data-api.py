@@ -86,6 +86,7 @@ class YouTubeDataAPI:
         """
         videos_info = []
         next_page_token = None
+        total_results=0
         while True:
             request = self.youtube.search().list(
                 part="snippet",
@@ -95,6 +96,7 @@ class YouTubeDataAPI:
                 pageToken=next_page_token
             )
             response = request.execute()
+            total_results += len(response['items'])
 
             for item in response['items']:
                 if 'videoId' in item['id']:
@@ -106,6 +108,7 @@ class YouTubeDataAPI:
             else:
                 break
 
+        print(total_results)
         return videos_info
 
     def get_video_info(self, video_id: str) -> Dict[str, str]:
@@ -147,8 +150,8 @@ def sample():
     channel_info = youtube.get_channel_info(LEX_CHANNEL_ID)
     print("Channel info:\n", json.dumps(channel_info, indent=4, sort_keys=True))
 
-    chanel_videos = youtube.get_channels_videos_info(LEX_CHANNEL_ID, max_results=700)
-    print(json.dumps(chanel_videos, indent=4, sort_keys=True))
+    chanel_videos = youtube.get_channels_videos_info(LEX_CHANNEL_ID, max_results=10)
+    # print(json.dumps(chanel_videos, indent=4, sort_keys=True))
     print("Number of videos: ", len(chanel_videos))
 
     # chanel_video_ids = youtube.get_channel_video_ids(chanel_videos)
