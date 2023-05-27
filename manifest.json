@@ -5,6 +5,6 @@
   "description": "Displays most liked and highest like ratio videos for a YouTube channel",
   "permissions": ["activeTab"],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "./src/popup.html"
   }
 }
