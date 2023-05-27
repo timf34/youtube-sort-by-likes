@@ -47,9 +47,9 @@ div {
 /* Styling for links */
 a {
     color: #333333;
-    text-decoration: underline;
-    text-decoration-color: #ffb6c1; /* light pink underline */
-    text-decoration-thickness: 2px;
+    text-decoration: none; /* remove standard underline */
+    border-bottom: 2px solid #ffb6c1; /* create underline using border */
+    padding-bottom: 2px; /* adjust the position of the underline */
     transition: opacity 0.3s ease-in-out; /* transition for hover effect */
 }
 
