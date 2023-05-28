@@ -34,6 +34,12 @@ async function updatePopup(videos) {
   let mostLikedList = document.getElementById("mostLikedList");
   let highestRatioList = document.getElementById("highestRatioList");
 
+  // Clear the lists 
+  mostLikedList.innerHTML = '';
+  highestRatioList.innerHTML = '';
+
+  await new Promise(resolve => setTimeout(resolve, 500));  // Temp pause to ensure its working 
+
   let baseVideoURL = "https://www.youtube.com/watch?v=";
   for (let i = 0; i < 3; i++) {
     let mostLikedItem = document.createElement('li');
@@ -46,6 +52,33 @@ async function updatePopup(videos) {
   }
 }
 
+async function refreshData() {
+
+  // Get the current tab's URL
+  const tabs = await new Promise(resolve =>
+    chrome.tabs.query({ active: true, currentWindow: true }, resolve)
+  );
+  const url = new URL(tabs[0].url);
+
+  // Get the channelId
+  const channelId = await getChannelId(url);
+
+  // Clear the cache for this channel
+  await new Promise((resolve, reject) => {
+    chrome.storage.local.remove(channelId, () => {
+      if (chrome.runtime.lastError) {
+        reject(chrome.runtime.lastError);
+      } else {
+        resolve();
+      }
+    });
+  });
+
+  // Fetch new data and update the popup
+  const videos = await getVideos(channelId);
+  updatePopup(videos);
+}
+
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   var url = new URL(tabs[0].url);
   getChannelId(url)
@@ -53,3 +86,5 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     .then(updatePopup)
     .catch(console.error);
 });
+
+document.getElementById('refreshButton').addEventListener('click', refreshData);
