@@ -38,7 +38,7 @@ async function updatePopup(videos) {
   mostLikedList.innerHTML = '';
   highestRatioList.innerHTML = '';
 
-  await new Promise(resolve => setTimeout(resolve, 500));  // Temp pause to ensure its working 
+  await new Promise(resolve => setTimeout(resolve, 200));  // Temp pause to ensure its working 
 
   let baseVideoURL = "https://www.youtube.com/watch?v=";
   for (let i = 0; i < 3; i++) {

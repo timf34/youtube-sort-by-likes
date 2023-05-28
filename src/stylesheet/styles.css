@@ -61,3 +61,11 @@ a {
 a:hover {
     opacity: 0.6;
 }
+
+#refreshButton {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
