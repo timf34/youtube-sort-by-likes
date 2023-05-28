@@ -7,14 +7,14 @@ body {
     flex-direction: column;
     align-items: center;
     width: 500px;
-    height: 500px;
+    height: 520px;
 }
 
 h1 {
     color: #666666;
     font-weight: 400;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 12px;
 }
 
 
@@ -30,6 +30,7 @@ ol {
     text-align: center;
     list-style-position: inside;
     padding: 0;
+    margin-bottom: 10px;
 }
 
 ol li {
@@ -43,6 +44,7 @@ div {
     margin: 20px;
     box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
+    margin-bottom: 15px;
 }
 
 /* Styling for links */
@@ -63,9 +65,19 @@ a:hover {
 }
 
 #refreshButton {
-    width: 30px;
-    height: 30px;
+    background-color: #e0e0e0;
+    border: 2px solid black;
+    border-radius: 10px; /* This value can be adjusted as needed */
+    padding: 6px;
+    font-size: 16px;
     cursor: pointer;
-    margin-bottom: 20px;
-  }
+    transition: background-color 0.3s ease-in-out;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#refreshButton:hover {
+    background-color: #bbb;
+}
   
