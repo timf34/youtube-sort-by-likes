@@ -1,8 +1,6 @@
-import { API_KEY, MAX_RESULTS } from './constants.js';
+import { API_KEY, MAX_RESULTS, USE_MOCK_DATA } from './constants.js';
 
-window.USE_MOCK_DATA = true;
-
-function getVideos(channelId, use_mock_data = true) {
+function getVideos(channelId, use_mock_data = USE_MOCK_DATA) {
   if (use_mock_data) {
     console.log("Using mock data");
     // Got this data just by looking in the console of popup.js
@@ -329,13 +327,30 @@ function getVideos(channelId, use_mock_data = true) {
 }
 
 
-function getVideoStats(videoId) {
+function getVideoStats(videoId, use_mock_data = USE_MOCK_DATA) {
+  if (use_mock_data) {
+    return Promise.resolve(generateMockStats(videoId));
+  }
   return fetch(
     `https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoId}&part=statistics`
   )
     .then((response) => response.json())
     .then((data) => data.items[0].statistics);
 }
+
+function generateMockStats(videoId) {
+  // Here we use videoId length to generate different stats. 
+  // This is arbitrary and you can replace this with a logic that suits your needs
+  const multiplier = videoId.length;
+
+  return {
+    "viewCount": `${10000 * multiplier}`,
+    "likeCount": `${5000 * multiplier}`,
+    "favoriteCount": "0",
+    "commentCount": `${1000 * multiplier}`,
+  };
+}
+
 
 function getChannelIdByUsername(username) {
   return fetch(
