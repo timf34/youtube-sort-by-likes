@@ -352,7 +352,12 @@ function generateMockStats(videoId) {
 }
 
 
-function getChannelIdByUsername(username) {
+function getChannelIdByUsername(username, use_mock_data = USE_MOCK_DATA) {
+
+  if (use_mock_data) {
+    return Promise.resolve("samharrisorg");
+  }
+  
   return fetch(
     `https://www.googleapis.com/youtube/v3/channels?key=${API_KEY}&forUsername=${username}&part=id`
   )
