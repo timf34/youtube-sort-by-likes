@@ -1,6 +1,7 @@
 import { API_KEY, MAX_RESULTS, USE_MOCK_DATA } from './constants.js';
+import { getCachedData, cacheData } from './utils.js';
 
-function getVideos(channelId, use_mock_data = USE_MOCK_DATA) {
+async function getVideos(channelId, use_mock_data = USE_MOCK_DATA) {
   if (use_mock_data) {
     console.log("Using mock data");
     // Got this data just by looking in the console of popup.js
@@ -316,14 +317,23 @@ function getVideos(channelId, use_mock_data = USE_MOCK_DATA) {
     );
   }
 
-  return fetch(
+  // Try to get the videos from the cache
+  const cachedVideos = await getCachedData(channelId);
+  if (cachedVideos) {
+    return cachedVideos;
+  }
+
+  const response = await fetch(
     `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${channelId}&part=snippet,id&order=viewCount&maxResults=${MAX_RESULTS}`
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Request successful");
-      return data.items.filter((item) => item.id.kind === "youtube#video")
-    });
+  );
+  const data = await response.json();
+  console.log("Request successful");
+  const videos = data.items.filter((item) => item.id.kind === "youtube#video");
+  
+  // Cache the videos for future use
+  await cacheData(channelId, videos);
+
+  return videos;
 }
 
 
@@ -357,7 +367,7 @@ function getChannelIdByUsername(username, use_mock_data = USE_MOCK_DATA) {
   if (use_mock_data) {
     return Promise.resolve("samharrisorg");
   }
-  
+
   return fetch(
     `https://www.googleapis.com/youtube/v3/channels?key=${API_KEY}&forUsername=${username}&part=id`
   )

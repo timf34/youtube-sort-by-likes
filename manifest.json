@@ -3,7 +3,7 @@
   "name": "YouTube Sort By Likes",
   "version": "1.0",
   "description": "Displays most liked and highest like ratio videos for a YouTube channel",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage"],
   "action": {
     "default_popup": "./src/popup.html"
   }
