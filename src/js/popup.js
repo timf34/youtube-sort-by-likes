@@ -16,7 +16,7 @@
 
       for (let i = 0; i < 3; i++) {
         if (likes > mostLikedVideos[i].likes) {
-          mostLikedVideos.splice(i, 0, { likes, title: video.snippet.title });
+          mostLikedVideos.splice(i, 0, { likes, title: video.snippet.title, id: id });
           mostLikedVideos.pop();
           break;
         }
