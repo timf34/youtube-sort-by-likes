@@ -24,7 +24,7 @@ async function updatePopup(videos) {
 
     for (let i = 0; i < 3; i++) {
       if (ratio > highestRatioVideos[i].ratio) {
-        highestRatioVideos.splice(i, 0, { ratio, title: video.snippet.title });
+        highestRatioVideos.splice(i, 0, { ratio, title: video.snippet.title, id: id });
         highestRatioVideos.pop();
         break;
       }
