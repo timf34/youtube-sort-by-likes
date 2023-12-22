@@ -1,7 +1,7 @@
-import { API_KEY, MAX_RESULTS, USE_MOCK_DATA } from './constants.js';
+import { API_KEY, MAX_RESULTS} from './constants.js';
 import { getCachedData, cacheData } from './utils.js';
 
-async function getVideos(channelId, use_mock_data = USE_MOCK_DATA) {
+async function getVideos(channelId) {
   // Try to get the videos from the cache
   const cachedVideos = await getCachedData(channelId);
   if (cachedVideos) {

@@ -1,6 +1,6 @@
-import {API_KEY, USE_MOCK_DATA} from "./constants";
+import {API_KEY} from "./constants";
 
-function getChannelIdByUsername(username, use_mock_data = USE_MOCK_DATA) {
+function getChannelIdByUsername(username) {
 
   console.log("username: ", username);
   console.log(`https://www.googleapis.com/youtube/v3/channels?key=${API_KEY}&forUsername=${username}&part=id`);
