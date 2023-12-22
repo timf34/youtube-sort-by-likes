@@ -22,7 +22,7 @@ async function getVideos(channelId) {
 }
 
 
-function getVideoStats(videoId, use_mock_data = USE_MOCK_DATA) {
+function getVideoStats(videoId) {
   return fetch(
     `https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoId}&part=statistics`
   )
