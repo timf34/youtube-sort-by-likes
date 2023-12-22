@@ -10,7 +10,6 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   getChannelIdByUsername: () => (/* binding */ getChannelIdByUsername),
 /* harmony export */   getVideoStats: () => (/* binding */ getVideoStats),
 /* harmony export */   getVideos: () => (/* binding */ getVideos)
 /* harmony export */ });
@@ -19,7 +18,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-async function getVideos(channelId, use_mock_data = _constants_js__WEBPACK_IMPORTED_MODULE_0__.USE_MOCK_DATA) {
+async function getVideos(channelId) {
   // Try to get the videos from the cache
   const cachedVideos = await (0,_utils_js__WEBPACK_IMPORTED_MODULE_1__.getCachedData)(channelId);
   if (cachedVideos) {
@@ -40,7 +39,7 @@ async function getVideos(channelId, use_mock_data = _constants_js__WEBPACK_IMPOR
 }
 
 
-function getVideoStats(videoId, use_mock_data = _constants_js__WEBPACK_IMPORTED_MODULE_0__.USE_MOCK_DATA) {
+function getVideoStats(videoId) {
   return fetch(
     `https://www.googleapis.com/youtube/v3/videos?key=${_constants_js__WEBPACK_IMPORTED_MODULE_0__.API_KEY}&id=${videoId}&part=statistics`
   )
@@ -48,29 +47,6 @@ function getVideoStats(videoId, use_mock_data = _constants_js__WEBPACK_IMPORTED_
     .then((data) => data.items[0].statistics);
 }
 
-
-function getChannelIdByUsername(username, use_mock_data = _constants_js__WEBPACK_IMPORTED_MODULE_0__.USE_MOCK_DATA) {
-
-  if (use_mock_data) {
-    return Promise.resolve("samharrisorg");
-  }
-
-  console.log("username: ", username);
-  console.log(`https://www.googleapis.com/youtube/v3/channels?key=${_constants_js__WEBPACK_IMPORTED_MODULE_0__.API_KEY}&forUsername=${username}&part=id`);
-
-  return fetch(
-    `https://www.googleapis.com/youtube/v3/channels?key=${_constants_js__WEBPACK_IMPORTED_MODULE_0__.API_KEY}&forUsername=${username}&part=id`
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("data: ", data);
-      if (data.items.length > 0) {
-        return data.items[0].id;
-      } else {
-        throw new Error('No channel found with this username');
-      }
-    });
-}
 
 
 
@@ -111,15 +87,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getCachedData: () => (/* binding */ getCachedData),
 /* harmony export */   getChannelId: () => (/* binding */ getChannelId)
 /* harmony export */ });
-/* harmony import */ var _api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./api.js */ "./src/js/api.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./src/js/constants.js");
 
+
+function getChannelIdByUsername(username) {
+
+  console.log("username: ", username);
+  console.log(`https://www.googleapis.com/youtube/v3/channels?key=${_constants__WEBPACK_IMPORTED_MODULE_0__.API_KEY}&forUsername=${username}&part=id`);
+
+  return fetch(
+      `https://www.googleapis.com/youtube/v3/channels?key=${_constants__WEBPACK_IMPORTED_MODULE_0__.API_KEY}&forUsername=${username}&part=id`
+  )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data: ", data);
+        if (data.items.length > 0) {
+          return data.items[0].id;
+        } else {
+          throw new Error('No channel found with this username');
+        }
+      });
+}
 
 function getChannelId(url) {
   if (url.hostname === 'www.youtube.com' && url.pathname.startsWith('/channel/')) {
     return Promise.resolve(url.pathname.split('/channel/')[1]);
   } else if (url.hostname === 'www.youtube.com' && url.pathname.startsWith('/@')) {
     let username = url.pathname.split('/@')[1].split('/videos')[0];
-    return (0,_api_js__WEBPACK_IMPORTED_MODULE_0__.getChannelIdByUsername)(username);
+    return getChannelIdByUsername(username);
   } else {
     throw new Error('URL is not a YouTube channel URL');
   }
@@ -311,8 +306,6 @@ async function refreshData() {
   updatePopup(videos);
 }
 
-console.log("hello bitches");
-
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   var url = new URL(tabs[0].url);
   (0,_utils_js__WEBPACK_IMPORTED_MODULE_1__.getChannelId)(url)
@@ -321,7 +314,6 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     .catch(console.error);
 });
 
-console.log("hello again bithces");
 document.getElementById('refreshButton').addEventListener('click', refreshData);
 
 })();
