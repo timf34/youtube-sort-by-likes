@@ -1,4 +1,23 @@
-import { getChannelIdByUsername } from './api.js';
+import {API_KEY, USE_MOCK_DATA} from "./constants";
+
+function getChannelIdByUsername(username, use_mock_data = USE_MOCK_DATA) {
+
+  console.log("username: ", username);
+  console.log(`https://www.googleapis.com/youtube/v3/channels?key=${API_KEY}&forUsername=${username}&part=id`);
+
+  return fetch(
+      `https://www.googleapis.com/youtube/v3/channels?key=${API_KEY}&forUsername=${username}&part=id`
+  )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data: ", data);
+        if (data.items.length > 0) {
+          return data.items[0].id;
+        } else {
+          throw new Error('No channel found with this username');
+        }
+      });
+}
 
 function getChannelId(url) {
   if (url.hostname === 'www.youtube.com' && url.pathname.startsWith('/channel/')) {
