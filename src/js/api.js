@@ -23,9 +23,6 @@ async function getVideos(channelId, use_mock_data = USE_MOCK_DATA) {
 
 
 function getVideoStats(videoId, use_mock_data = USE_MOCK_DATA) {
-  if (use_mock_data) {
-    return Promise.resolve(generateMockStats(videoId));
-  }
   return fetch(
     `https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoId}&part=statistics`
   )
@@ -33,40 +30,5 @@ function getVideoStats(videoId, use_mock_data = USE_MOCK_DATA) {
     .then((data) => data.items[0].statistics);
 }
 
-function generateMockStats(videoId) {
-  // Here we use videoId length to generate different stats. 
-  // This is arbitrary and you can replace this with a logic that suits your needs
-  const multiplier = videoId.length;
 
-  return {
-    "viewCount": `${10000 * multiplier}`,
-    "likeCount": `${5000 * multiplier}`,
-    "favoriteCount": "0",
-    "commentCount": `${1000 * multiplier}`,
-  };
-}
-
-
-function getChannelIdByUsername(username, use_mock_data = USE_MOCK_DATA) {
-
-  if (use_mock_data) {
-    return Promise.resolve("samharrisorg");
-  }
-
-  console.log("username: ", username);
-
-  return fetch(
-    `https://www.googleapis.com/youtube/v3/channels?key=${API_KEY}&forUsername=${username}&part=id`
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("data: ", data);
-      if (data.items.length > 0) {
-        return data.items[0].id;
-      } else {
-        throw new Error('No channel found with this username');
-      }
-    });
-}
-
-export { getVideos, getVideoStats, getChannelIdByUsername };
+export { getVideos, getVideoStats};
