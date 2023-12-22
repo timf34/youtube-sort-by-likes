@@ -24,6 +24,7 @@ function cacheData(key, data) {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
       } else {
+        console.log("Data cached for key: ", key);
         resolve();
       }
     });
@@ -37,6 +38,7 @@ function getCachedData(key) {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
       } else {
+        console.log("Cached data for key: ", key, result);
         resolve(result[key]);
       }
     });

@@ -4,6 +4,7 @@ import { decodeHtml } from './utils.js';
 
 // Updates the popup with the most liked video and video with the highest like/view ratio
 async function updatePopup(videos) {
+  console.log("Updating popup");
   let mostLikedVideos = Array(3).fill({ likes: 0, title: "", id: "" });
   let highestRatioVideos = Array(3).fill({ ratio: 0, title: "", id: "" });
 
