@@ -1,5 +1,4 @@
-import { getVideos, getVideoStats } from './api.js';
-import { getChannelId } from './utils.js';
+import { getChannelId, getVideos, getVideoStats } from './api.js';
 import { decodeHtml } from './utils.js';
 
 // Updates the popup with the most liked video and video with the highest like/view ratio
@@ -35,11 +34,11 @@ async function updatePopup(videos) {
   let mostLikedList = document.getElementById("mostLikedList");
   let highestRatioList = document.getElementById("highestRatioList");
 
-  // Clear the lists 
+  // Clear the lists
   mostLikedList.innerHTML = '';
   highestRatioList.innerHTML = '';
 
-  await new Promise(resolve => setTimeout(resolve, 200));  // Temp pause to ensure its working 
+  await new Promise(resolve => setTimeout(resolve, 200));  // Temp pause to ensure its working
 
   let baseVideoURL = "https://www.youtube.com/watch?v=";
   for (let i = 0; i < 3; i++) {
