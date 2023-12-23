@@ -80,6 +80,14 @@ function updateTopVideos(topVideos, metricValue, video, likes, views, metricKey)
 async function updatePopup(videos) {
   console.log("Updating popup");
 
+  // Loading message
+  const loadingScreen = document.getElementById('loading-screen');
+  loadingScreen.style.display = 'block';
+  // Timeout to allow the loading message to display for 5 seconds
+  setTimeout(() => {
+    loadingScreen.style.display = 'none';
+  }, 2000);
+
   // Initialize arrays to store top videos based on likes and like/view ratio
   let highestRatioVideos = Array(10).fill({ ratio: 0, title: "", likes: "", views: "", id: "" });
 
@@ -89,6 +97,8 @@ async function updatePopup(videos) {
     // Maintains the top 3 videos with the highest like/view ratio
     updateTopVideos(highestRatioVideos, ratio, video, likes, views, 'ratio');
   }
+
+
   // Update the DOM with the top videos
   await updateDOMList("highestRatioVideos", highestRatioVideos);
 }

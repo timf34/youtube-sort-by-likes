@@ -135,3 +135,37 @@
 .frame::-webkit-scrollbar-corner {
     background-color: #f0f0f0; /* Same as track color */
 }
+
+#loading-screen {
+    position: absolute; /* This will position the loading screen on top of the card background */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust the positioning correctly */
+    width: 100%; /* Take full width of the parent */
+    height: 100%; /* Take full height of the parent */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#loading-screen .loading-spinner {
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #c0c0c0; /* Dark grey */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+#loading-screen .text {
+    margin-top: 20px;
+    font-size: 1.5em;
+    color: #333;
+    text-align: center;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
