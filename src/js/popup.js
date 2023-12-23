@@ -10,9 +10,6 @@ function createElementWithClassAndText(tag, className, textContent, videoId) {
   if (textContent) {
     element.textContent = textContent;
   }
-  if (tag === "a" && videoId) {
-    element.href = "https://www.youtube.com/watch?v=" + videoId;
-  }
   return element;
 }
 
@@ -28,7 +25,9 @@ async function updateDOMList(listId, videos) {
     // Create the card and info card elements
     const card = createElementWithClassAndText('div', 'card');
     const infoCard = createElementWithClassAndText('div', 'info-card');
-    const titlePara = createElementWithClassAndText('a', 'video-title', decodeHtml(video.title), decodeHtml(video.id));
+    const titlePara = createElementWithClassAndText('a', 'video-title', decodeHtml(video.title));
+    titlePara.href = "https://www.youtube.com/watch?v=" + decodeHtml(video.id);
+    titlePara.target = "_blank";
     const likesDiv = createElementWithClassAndText('div', 'likes-text', `Likes: ${video.likes.toLocaleString()}`);
     const ratioDiv = createElementWithClassAndText('div', 'ratio-text', `Ratio: ${video.ratio.toFixed(3)}`);
     const viewsDiv = createElementWithClassAndText('div', 'views-text', `Views: ${video.views.toLocaleString()}`);
