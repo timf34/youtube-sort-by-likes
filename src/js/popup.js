@@ -4,11 +4,14 @@ import { mockVideosData} from "./mockData";
 import { USE_MOCK_DATA} from "./constants";
 
 // Helper function to create DOM elements with class and text
-function createElementWithClassAndText(tag, className, textContent) {
+function createElementWithClassAndText(tag, className, textContent, videoId) {
   const element = document.createElement(tag);
   element.className = className;
   if (textContent) {
     element.textContent = textContent;
+  }
+  if (tag === "a" && videoId) {
+    element.href = "https://www.youtube.com/watch?v=" + videoId;
   }
   return element;
 }
@@ -25,7 +28,7 @@ async function updateDOMList(listId, videos) {
     // Create the card and info card elements
     const card = createElementWithClassAndText('div', 'card');
     const infoCard = createElementWithClassAndText('div', 'info-card');
-    const titlePara = createElementWithClassAndText('p', 'video-title', decodeHtml(video.title));
+    const titlePara = createElementWithClassAndText('a', 'video-title', decodeHtml(video.title), decodeHtml(video.id));
     const likesDiv = createElementWithClassAndText('div', 'likes-text', `Likes: ${video.likes.toLocaleString()}`);
     const ratioDiv = createElementWithClassAndText('div', 'ratio-text', `Ratio: ${video.ratio.toFixed(3)}`);
     const viewsDiv = createElementWithClassAndText('div', 'views-text', `Views: ${video.views.toLocaleString()}`);
@@ -79,7 +82,7 @@ async function updatePopup(videos) {
   console.log("Updating popup");
 
   // Initialize arrays to store top videos based on likes and like/view ratio
-  let highestRatioVideos = Array(3).fill({ ratio: 0, title: "", likes: "", views: "", id: "" });
+  let highestRatioVideos = Array(10).fill({ ratio: 0, title: "", likes: "", views: "", id: "" });
 
   for (let video of videos) {
     let { views, likes, id, ratio } = await fetchVideoStats(video.id.videoId);
