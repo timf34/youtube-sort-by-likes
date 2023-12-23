@@ -85,7 +85,7 @@
     position: absolute;
     width: 285px;
     top: 5px;
-    left: 6px;
+    left: 15px;
     font-family: "Inter-Regular", Helvetica;
     font-weight: 400;
     color: #000000;
@@ -107,11 +107,12 @@
     font-size: 10px;
     letter-spacing: 0;
     line-height: normal;
+    white-space: nowrap;
 }
 
-.frame .likes-text {left: 91px;}
-.frame .ratio-text {left: 25px;}
-.frame .views-text {left: 153px;}
+.frame .ratio-text {left: 15px;}
+.frame .likes-text {left: 90px;}
+.frame .views-text {left: 165px;}
 
 .frame .info-card {
     position: relative;
