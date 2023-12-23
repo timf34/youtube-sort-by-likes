@@ -3,36 +3,6 @@ import { decodeHtml } from './utils.js';
 import { mockVideosData} from "./mockData";
 import { USE_MOCK_DATA} from "./constants";
 
-
-async function fetchVideoStats(videoId) {
-  let stats = await getVideoStats(videoId);
-  return {
-    views: parseInt(stats.viewCount),
-    likes: parseInt(stats.likeCount),
-    id: videoId,
-    ratio: parseInt(stats.likeCount) / parseInt(stats.viewCount)
-  };
-}
-
-/**
- * Updates the top videos array based on the given metric.
- * @param {Array} topVideos - The array to update with top videos.
- * @param {number} metricValue - The metric value to compare (likes or ratio).
- * @param {Object} video - The video object to potentially add to the top videos.
- * @param {number} likes - The number of likes for the video.
- * @param {number} views - The number of views for the video.
- * @param {string} metricKey - The key of the metric ('likes' or 'ratio').
- */
-function updateTopVideos(topVideos, metricValue, video, likes, views, metricKey) {
-  for (let i = 0; i < topVideos.length; i++) {
-    if (metricValue > topVideos[i][metricKey]) {
-      topVideos.splice(i, 0, {[metricKey]: metricValue, title: video.snippet.title, id: video.id.videoId, likes: likes, views: views});
-      topVideos.pop();
-      break;
-    }
-  }
-}
-
 // Helper function to create DOM elements with class and text
 function createElementWithClassAndText(tag, className, textContent) {
   const element = document.createElement(tag);
@@ -69,6 +39,35 @@ async function updateDOMList(listId, videos) {
     card.appendChild(infoCard);  // Append the info card to the main card
     frameElement.appendChild(card);  // Append the main card to the frame
   });
+}
+
+async function fetchVideoStats(videoId) {
+  let stats = await getVideoStats(videoId);
+  return {
+    views: parseInt(stats.viewCount),
+    likes: parseInt(stats.likeCount),
+    id: videoId,
+    ratio: parseInt(stats.likeCount) / parseInt(stats.viewCount)
+  };
+}
+
+/**
+ * Updates the top videos array based on the given metric.
+ * @param {Array} topVideos - The array to update with top videos.
+ * @param {number} metricValue - The metric value to compare (likes or ratio).
+ * @param {Object} video - The video object to potentially add to the top videos.
+ * @param {number} likes - The number of likes for the video.
+ * @param {number} views - The number of views for the video.
+ * @param {string} metricKey - The key of the metric ('likes' or 'ratio').
+ */
+function updateTopVideos(topVideos, metricValue, video, likes, views, metricKey) {
+  for (let i = 0; i < topVideos.length; i++) {
+    if (metricValue > topVideos[i][metricKey]) {
+      topVideos.splice(i, 0, {[metricKey]: metricValue, title: video.snippet.title, id: video.id.videoId, likes: likes, views: views});
+      topVideos.pop();
+      break;
+    }
+  }
 }
 
 /**
