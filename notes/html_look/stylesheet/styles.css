@@ -1,0 +1,83 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+    margin: 20px;
+    color: #333333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+    height: 520px;
+}
+
+h1 {
+    color: #666666;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+
+h2 {
+    color: #666666;
+    font-weight: 400;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+ol {
+    font-size: 16px;
+    text-align: center;
+    list-style-position: inside;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+ol li {
+    margin-bottom: 10px;
+}
+
+div {
+    background-color: white;
+    width: 80%;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
+
+/* Styling for links */
+a {
+    color: #333333;
+    text-decoration: none;
+    /* remove standard underline */
+    border-bottom: 2px solid #ffb6c1;
+    /* create underline using border */
+    padding-bottom: 2px;
+    /* adjust the position of the underline */
+    transition: opacity 0.3s ease-in-out;
+    /* transition for hover effect */
+}
+
+a:hover {
+    opacity: 0.6;
+}
+
+#refreshButton {
+    background-color: #e0e0e0;
+    border: 2px solid black;
+    border-radius: 10px; /* This value can be adjusted as needed */
+    padding: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#refreshButton:hover {
+    background-color: #bbb;
+}
+  
