@@ -27,7 +27,7 @@ async function updateDOMList(listId, videos) {
     const infoCard = createElementWithClassAndText('div', 'info-card');
     const titlePara = createElementWithClassAndText('p', 'video-title', decodeHtml(video.title));
     const likesDiv = createElementWithClassAndText('div', 'likes-text', `Likes: ${video.likes.toLocaleString()}`);
-    const ratioDiv = createElementWithClassAndText('div', 'ratio-text', `Ratio: ${video.ratio}`);
+    const ratioDiv = createElementWithClassAndText('div', 'ratio-text', `Ratio: ${video.ratio.toFixed(3)}`);
     const viewsDiv = createElementWithClassAndText('div', 'views-text', `Views: ${video.views.toLocaleString()}`);
 
     // Append the video details to the info card
@@ -43,11 +43,12 @@ async function updateDOMList(listId, videos) {
 
 async function fetchVideoStats(videoId) {
   let stats = await getVideoStats(videoId);
+  let ratio = (parseInt(stats.likeCount, 10) / parseInt(stats.viewCount, 10)).toFixed(3);
   return {
     views: parseInt(stats.viewCount),
     likes: parseInt(stats.likeCount),
     id: videoId,
-    ratio: parseInt(stats.likeCount) / parseInt(stats.viewCount)
+    ratio: parseFloat(ratio)
   };
 }
 
