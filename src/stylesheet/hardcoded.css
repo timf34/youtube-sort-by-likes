@@ -58,18 +58,6 @@
     object-fit: cover;
 }
 
-/*bitches*/
-
-/*.frame {*/
-/*    display: inline-flex;*/
-/*    flex-direction: column;*/
-/*    height: 331px;*/
-/*    align-items: flex-start;*/
-/*    gap: 7px;*/
-/*    position: relative;*/
-/*    overflow-x: hidden;*/
-/*}*/
-
 .frame {
     width: 311px; /* Width of the frame, ensure it's less than the width of .box */
     /* Height can be auto or a fixed value, depending on content */
@@ -128,6 +116,6 @@
     position: relative;
     width: 303px;
     height: 43px;
-    background-image: url(./assests/card.svg);
+    background-image: url(../assests/card.svg);
     background-size: 100% 100%;
 }
