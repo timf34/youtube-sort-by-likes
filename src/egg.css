@@ -1,0 +1,56 @@
+.box {
+    width: 350px;
+    height: 400px;
+}
+
+.box .card-background {
+    position: fixed;
+    width: 352px;
+    height: 400px;
+    top: 0;
+    left: 0;
+}
+
+.box .overlap-group {
+    position: relative;
+    width: 350px;
+    height: 400px;
+    background-color: #f7f7f7;
+    border-radius: 15px;
+    border: 1px solid;
+    border-color: #000000;
+    box-shadow: 0px 4px 4px #00000040;
+}
+
+.box .rectangle {
+    position: absolute;
+    width: 6px;
+    height: 261px;
+    top: 8px;
+    left: 340px;
+    background-color: #e4e4e4;
+    border-radius: 3px;
+}
+
+.box .title {
+    position: absolute;
+    top: 17px;
+    left: 116px;
+    font-family: "Inter-Bold", Helvetica;
+    font-weight: 700;
+    color: #000000;
+    font-size: 15px;
+    letter-spacing: 0;
+    line-height: normal;
+    text-decoration: underline;
+    white-space: nowrap;
+}
+
+.box .DALL-e {
+    position: absolute;
+    width: 35px;
+    height: 36px;
+    top: 5px;
+    left: 77px;
+    object-fit: cover;
+}
