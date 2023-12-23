@@ -74,8 +74,6 @@
     overflow-x: hidden;
 }
 
-
-
 .frame .card {
     position: relative;
     width: 100%;
@@ -94,6 +92,9 @@
     font-size: 12px;
     letter-spacing: 0;
     line-height: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .frame .likes-text, .frame .ratio-text, .frame .views-text {
