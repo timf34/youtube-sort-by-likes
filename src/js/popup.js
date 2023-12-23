@@ -3,19 +3,6 @@ import { decodeHtml } from './utils.js';
 import { mockVideosData} from "./mockData";
 import { USE_MOCK_DATA} from "./constants";
 
-// TODO: use this function
-function updateCard(video, cardElement) {
-  const titleElement = cardElement.querySelector('.p');
-  const likesElement = cardElement.querySelector('.likes-text');
-  const ratioElement = cardElement.querySelector('.ratio-text');
-  const viewsElement = cardElement.querySelector('.views-text');
-
-  titleElement.textContent = video.title;
-  likesElement.textContent = `Likes: ${video.likes}`;
-  ratioElement.textContent = `Ratio: ${(video.likes / video.views * 100).toFixed(1)}%`;
-  viewsElement.textContent = `Views: ${video.views}`;
-}
-
 
 async function fetchVideoStats(videoId) {
   let stats = await getVideoStats(videoId);
@@ -46,51 +33,32 @@ function updateTopVideos(topVideos, metricValue, video, likes, views, metricKey)
   }
 }
 
+// Helper function to create DOM elements with class and text
+function createElementWithClassAndText(tag, className, textContent) {
+  const element = document.createElement(tag);
+  element.className = className;
+  if (textContent) {
+    element.textContent = textContent;
+  }
+  return element;
+}
+
 /**
  * Updates the specified DOM list with video information.
  * @param {string} listId - The ID of the DOM element to update.
  * @param {Array} videos - The array of video objects to display in the list.
  */
 async function updateDOMList(listId, videos) {
-  // let listElement = document.getElementById(listId);
-  // listElement.innerHTML = '';  // Clear existing list content
-  //
-  // await new Promise(resolve => setTimeout(resolve, 200)); // Temp pause to ensure its working
-  //
-  // // Create list items for each video and append them to the list
-  // videos.forEach(video => {
-  //   let listItem = document.createElement('li');
-  //   let videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
-  //   listItem.innerHTML = `<a href="${videoUrl}" target="_blank">${decodeHtml(video.title)}</a>`;
-  //   listElement.appendChild(listItem);
-  // });
   let frameElement = document.querySelector('.frame');
 
-  // Create cards for each video and append them to the frame
   videos.forEach(video => {
-    let card = document.createElement('div');
-    card.className = 'card';
-
-    console.log("video", video);
-
-    let infoCard = document.createElement('div');
-    infoCard.className = 'info-card';
-
-    let titlePara = document.createElement('p');
-    titlePara.className = 'video-title';
-    titlePara.textContent = decodeHtml(video.title); // Assuming title is already HTML-encoded
-
-    let likesDiv = document.createElement('div');
-    likesDiv.className = 'likes-text';
-    likesDiv.textContent = `Likes: ${video.likes.toLocaleString()}`;
-
-    let ratioDiv = document.createElement('div');
-    ratioDiv.className = 'ratio-text';
-    ratioDiv.textContent = `Ratio: ${video.ratio}`; // Assuming ratio is a percentage
-
-    let viewsDiv = document.createElement('div');
-    viewsDiv.className = 'views-text';
-    viewsDiv.textContent = `Views: ${video.views.toLocaleString()}`;
+    // Create the card and info card elements
+    const card = createElementWithClassAndText('div', 'card');
+    const infoCard = createElementWithClassAndText('div', 'info-card');
+    const titlePara = createElementWithClassAndText('p', 'video-title', decodeHtml(video.title));
+    const likesDiv = createElementWithClassAndText('div', 'likes-text', `Likes: ${video.likes.toLocaleString()}`);
+    const ratioDiv = createElementWithClassAndText('div', 'ratio-text', `Ratio: ${video.ratio}`);
+    const viewsDiv = createElementWithClassAndText('div', 'views-text', `Views: ${video.views.toLocaleString()}`);
 
     // Append the video details to the info card
     infoCard.appendChild(titlePara);
@@ -98,11 +66,8 @@ async function updateDOMList(listId, videos) {
     infoCard.appendChild(ratioDiv);
     infoCard.appendChild(viewsDiv);
 
-    // Append the info card to the main card
-    card.appendChild(infoCard);
-
-    // Append the main card to the frame
-    frameElement.appendChild(card);
+    card.appendChild(infoCard);  // Append the info card to the main card
+    frameElement.appendChild(card);  // Append the main card to the frame
   });
 }
 
