@@ -15,19 +15,6 @@
     margin-right: -8px;
 }
 
-.frame .div {
-    position: absolute;
-    width: 60px;
-    top: 24px;
-    left: 91px;
-    font-family: "Inter-Regular", Helvetica;
-    font-weight: 400;
-    color: #979797;
-    font-size: 10px;
-    letter-spacing: 0;
-    line-height: normal;
-}
-
 .frame .p {
     position: absolute;
     width: 285px;
