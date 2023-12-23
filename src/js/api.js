@@ -1,4 +1,4 @@
-import { API_KEY, MAX_RESULTS } from './constants.js';
+import {API_KEY, MAX_RESULTS, USE_MOCK_DATA} from './constants.js';
 import { getCachedData, cacheData } from './utils.js';
 
 // Function to handle fetching data from the YouTube API
@@ -52,9 +52,27 @@ async function getVideos(channelId) {
 }
 
 // Function to get video statistics
-async function getVideoStats(videoId) {
+async function getVideoStats(videoId, use_mock_data = USE_MOCK_DATA) {
+
+  if (USE_MOCK_DATA){
+    return Promise.resolve(generateMockStats(videoId));
+  }
+
   const data = await fetchYouTubeAPI(`https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoId}&part=statistics`);
   return data.items[0].statistics;
+}
+
+function generateMockStats(videoId) {
+  // Here we use videoId length to generate different stats.
+  // This is arbitrary and you can replace this with a logic that suits your needs
+  const multiplier = videoId.length;
+
+  return {
+    "viewCount": `${10000 * multiplier}`,
+    "likeCount": `${5000 * multiplier}`,
+    "favoriteCount": "0",
+    "commentCount": `${1000 * multiplier}`,
+  };
 }
 
 export { getChannelId, getVideos, getVideoStats };
