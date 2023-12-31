@@ -11,8 +11,8 @@ Please note that the first functionality is still in development.
 
 ## TODO
 
-- [] Add instructions for bringing your own YouTube API key, _and make adding it easy_
-- [] Update README with the extension in action
+- [ ] Add instructions for bringing your own YouTube API key, _and make adding it easy_
+- [ ] Update README with the extension in action
 
 ## Getting Started
 These instructions will guide you to run this project in your local machine for development and testing purposes.
