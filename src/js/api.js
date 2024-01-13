@@ -25,15 +25,45 @@ async function getChannelIdByUsername(username) {
   }
 }
 
-// Function to extract channel ID from URL
-function getChannelId(url) {
-  if (url.hostname === 'www.youtube.com' && url.pathname.startsWith('/channel/')) {
-    return Promise.resolve(url.pathname.split('/channel/')[1]);
-  } else if (url.hostname === 'www.youtube.com' && url.pathname.startsWith('/@')) {
-    const username = url.pathname.split('/@')[1].split('/videos')[0];
-    return getChannelIdByUsername(username);
-  } else {
-    throw new Error('URL is not a valid YouTube channel URL');
+async function getChannelIdFromPageSource(url) {
+  try {
+    const response = await fetch(url);
+    const html = await response.text();
+
+    // Regex pattern to find the channel ID
+    const pattern = /"channelId":"(UC[^"]+)"/;
+    const match = pattern.exec(html);
+
+    if (match && match[1]) {
+      return match[1];  // Channel ID
+    } else {
+      throw new Error('Channel ID not found in page source');
+    }
+  } catch (error) {
+    console.error('Error fetching page:', error);
+    throw error;
+  }
+}
+
+// Updated function to extract channel ID from URL
+async function getChannelId(url) {
+  try {
+    if (url.hostname === 'www.youtube.com' && url.pathname.startsWith('/channel/')) {
+      return url.pathname.split('/channel/')[1];
+    } else if (url.hostname === 'www.youtube.com' && url.pathname.startsWith('/@')) {
+      const username = url.pathname.split('/@')[1].split('/')[0];
+      try {
+        return await getChannelIdByUsername(username);
+      } catch {
+        // If getting channel ID by username fails (due to custom URL), try extracting from page source
+        return await getChannelIdFromPageSource(url.href);
+      }
+    } else {
+      throw new Error('URL is not a valid YouTube channel URL');
+    }
+  } catch (error) {
+    console.error('Error in getChannelId:', error.message);
+    throw error;
   }
 }
 
