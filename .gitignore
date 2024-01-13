@@ -1,6 +1,6 @@
 /dist/
 /node_modules/
 
-src/js/constants.js
+/src/js/constants.js
 client_secret_541571150180-ubpg8s5aeoq9ngefn4tami93c7a0bg37.apps.googleusercontent.com.json
 token.json
