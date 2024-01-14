@@ -2,6 +2,7 @@
 const fetch = require('node-fetch');
 
 const API_KEY = "AIzaSyCH3y1_3XlxueC-ecNYfTcHOlTxtOiwL1o";
+const MAX_SEARCH_RESULTS = 5;
 
 async function fetchYouTubeAPI(url) {
     try {
@@ -16,6 +17,48 @@ async function fetchYouTubeAPI(url) {
     }
 }
 
+async function searchChannels(customName) {
+    const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(customName)}&type=channel&maxResults=${MAX_SEARCH_RESULTS}&key=${API_KEY}`;
+    const searchData = await fetchYouTubeAPI(searchUrl);
+
+    return searchData.items.map(item => item.id.channelId);
+}
+
+async function getChannelCustomUrl(channelId) {
+    const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${channelId}&key=${API_KEY}`;
+    const channelData = await fetchYouTubeAPI(channelUrl);
+
+    if (channelData.items.length > 0 && channelData.items[0].snippet.customUrl) {
+        return channelData.items[0].snippet.customUrl;
+    }
+
+    return null;
+}
+
+
+async function findChannelIdByCustomName(customName) {
+    try {
+        const channelIds = await searchChannels(customName);
+
+        for (const channelId of channelIds) {
+            let channelCustomUrl = await getChannelCustomUrl(channelId);
+            // Remove leading '@' if present and convert to lower case
+            channelCustomUrl = channelCustomUrl.replace(/^@/, '').toLowerCase();
+            const lowerCustomName = customName.toLowerCase();
+
+            if (channelCustomUrl === lowerCustomName) {
+                return channelId;
+            }
+        }
+
+        throw new Error('Channel ID not found for given custom name');
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
+}
+
+
 async function getChannelIdByUsername(username) {
     const data = await fetchYouTubeAPI(`https://www.googleapis.com/youtube/v3/channels?key=${API_KEY}&forUsername=${username}&part=id`);
     if (data.items && data.items.length > 0) {
@@ -25,25 +68,6 @@ async function getChannelIdByUsername(username) {
     }
 }
 
-async function getChannelIdFromPageSource(url) {
-    try {
-        const response = await fetch(url);
-        const html = await response.text();
-
-        // Regex pattern to find the channel ID
-        const pattern = /"channelId":"(UC[^"]+)"/;
-        const match = pattern.exec(html);
-
-        if (match && match[1]) {
-            return match[1];  // Channel ID
-        } else {
-            throw new Error('Channel ID not found in page source');
-        }
-    } catch (error) {
-        console.error('Error fetching page:', error);
-        throw error;
-    }
-}
 
 // Updated function to extract channel ID from URL
 async function getChannelId(url) {
@@ -55,8 +79,8 @@ async function getChannelId(url) {
             try {
                 return await getChannelIdByUsername(username);
             } catch {
-                // If getting channel ID by username fails (due to custom URL), try extracting from page source
-                return await getChannelIdFromPageSource(url.href);
+                // If getting channel ID by username fails (due to custom URL), we can try searching by custom URL
+                return await findChannelIdByCustomName(username);
             }
         } else {
             throw new Error('URL is not a valid YouTube channel URL');
