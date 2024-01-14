@@ -19,7 +19,7 @@ function createElementWithClassAndText(tag, className, textContent, videoId) {
  * @param {Array} videos - The array of video objects to display in the list.
  */
 async function updateDOMList(listId, videos) {
-  let frameElement = document.querySelector('.frame');
+  let videoListElement = document.querySelector('.video-list');
 
   videos.forEach(video => {
     // Create the card and info card elements
@@ -39,7 +39,7 @@ async function updateDOMList(listId, videos) {
     infoCard.appendChild(viewsDiv);
 
     card.appendChild(infoCard);  // Append the info card to the main card
-    frameElement.appendChild(card);  // Append the main card to the frame
+    videoListElement.appendChild(card);  // Append the main card to the video-list
   });
 }
 
@@ -103,6 +103,7 @@ async function updatePopup(videos) {
   await updateDOMList("highestRatioVideos", highestRatioVideos);
 }
 
+// TODO: not sure if this is needed!
 async function refreshData() {
 
   if (USE_MOCK_DATA) {
@@ -135,6 +136,32 @@ async function refreshData() {
   const videos = await getVideos(channelId);
   updatePopup(videos);
 }
+
+function showLoadMoreButton() {
+  const loadMoreContainer = document.getElementById('load-more-container');
+  loadMoreContainer.style.display = 'block';
+}
+
+function hideLoadMoreButton() {
+  const loadMoreContainer = document.getElementById('load-more-container');
+  loadMoreContainer.style.display = 'none';
+}
+
+function isScrolledToBottom() {
+  const frameElement = document.querySelector('.frame');
+  const scrollOffset = 5; // leeway in pixels
+  return frameElement.scrollHeight - frameElement.scrollTop - frameElement.clientHeight < scrollOffset;
+}
+
+document.querySelector('.frame').addEventListener('scroll', () => {
+  if (isScrolledToBottom()) {
+    showLoadMoreButton();
+  }
+  // } else {
+  //   hideLoadMoreButton();
+  // }
+});
+
 
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   var url = new URL(tabs[0].url);

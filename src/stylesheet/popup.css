@@ -135,6 +135,34 @@
     background-color: #f0f0f0; /* Same as track color */
 }
 
+.load-more-container {
+    width: 100%; /* Same width as your cards */
+    padding: 5px 0; /* Add some padding */
+    text-align: center;
+    display: none; /* Initially hidden */
+}
+
+.load-more-button {
+    padding: 10px 15px;
+    background-color: #f7f7f7; /* Same as your card background */
+    color: #000000; /* Same as your text color */
+    border: 1px solid #000000; /* Same as your card border */
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: "Inter-Regular", Helvetica; /* Same as your other text */
+    font-size: 11px; /* Same as your card text */
+    letter-spacing: 0;
+    line-height: normal;
+    outline: none; /* Remove focus outline */
+    box-shadow: none; /* No shadow for a flat design */
+    width: 95%; /* Width to fit within the frame */
+    margin: 0 auto; /* Center the button */
+}
+
+.load-more-button:hover {
+    background-color: #e6e6e6; /* Slightly darker on hover */
+}
+
 #loading-screen {
     position: absolute; /* This will position the loading screen on top of the card background */
     top: 50%; /* Center vertically */
